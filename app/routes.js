@@ -1,13 +1,21 @@
 module.exports = function(app, passport, db) {
+  //app is express dependency in server js, passport is dependecny in server js, db is database that is connected from server js
 
 // normal routes ===============================================================
 
     // show the home page (will also have our login links)
+    //renders the index.ejs file
     app.get('/', function(req, res) {
         res.render('index.ejs');
     });
 
+    app.get('/boot', function(req, res) {
+      res.render('boot.ejs');
+  });
+
     // PROFILE SECTION =========================
+    //renders the profile.ejs if /profile is requested
+    //finding database collection and returns as array
     app.get('/profile', isLoggedIn, function(req, res) {
         db.collection('messages').find().toArray((err, result) => {
           if (err) return console.log(err)
@@ -49,8 +57,30 @@ module.exports = function(app, passport, db) {
       })
     })
 
+    app.put('/thumbDown', (req, res) => {
+      db.collection('messages')
+      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+        $set: {
+          thumbUp: req.body.thumbUp - 1 
+        }
+      }, {
+        sort: {_id: -1},
+        upsert: true
+      }, (err, result) => {
+        if (err) return res.send(err)
+        res.send(result)
+      })
+    })
+
     app.delete('/messages', (req, res) => {
       db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+        if (err) return res.send(500, err)
+        res.send('Message deleted!')
+      })
+    })
+
+    app.delete('/filter', (req, res) => {
+      db.collection('messages').remove({name: req.body.name, msg: req.body.msg}, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })
@@ -110,6 +140,5 @@ module.exports = function(app, passport, db) {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-
     res.redirect('/');
 }

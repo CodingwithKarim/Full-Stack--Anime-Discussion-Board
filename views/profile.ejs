@@ -4,42 +4,39 @@
     <title>21 Savage Fan Site</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
-    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/1b23973fb1.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel = 'stylesheet' href="profile.css">
 </head>
 <body>
-<div class="container">
+
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Profile Page</h1>
+      <div id = 'mask'></div>
+      <% if(user.local.email) { %>
+        <h1><span class="fas fa-angle-right"></span> <%= user.local.email[0].toUpperCase() +  user.local.email.slice(1) %>'s Profile </h1> <% } %>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
-    <div class="row">
+    
 
         <!-- LOCAL INFORMATION -->
-        <div class="col-sm-6">
-            <div class="well">
-                <h3><span class="fa fa-user"></span> Local</h3>
+        <section style="text-align: center;">
+          <h2 style="font-family: 'Bebas Neue', cursive;"> Place Argument</h2>
+        <% if (user.local.email) { %>
+          <form action="/messages" method="POST">
+            <input type="text" name="name" placeholder="Input Character">
+            <input type="text" placeholder="Input Argument" name="msg">
+            <button type="submit">Submit</button>
+          </form>
+        <% } %>
 
-                <% if (user.local.email) { %>
-                    <p>
-                        <strong>id</strong>: <%= user._id %><br>
-                        <strong>email</strong>: <%= user.local.email %><br>
-                        <strong>password</strong>: <%= user.local.password %>
-                    </p>
-
-                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
-                <% } else { %>
-                    <a href="/connect/local" class="btn btn-default">Connect Local</a>
-                <% } %>
-
-            </div>
-        </div>
-        <div class="col-sm-6">
-          <h3>Messages</h3>
+          <h3 style="font-family: 'Bebas Neue', cursive;">Message Board</h3>
           <ul class="messages">
           <% for(var i=0; i<messages.length; i++) {%>
-            <li class="message">
+            <li class= "list-group-item d-flex justify-content-between align-items-start" style="list-style-type: none;">
               <span><%= messages[i].name %></span>
               <span><%= messages[i].msg %></span>
               <span><%= messages[i].thumbUp %></span>
@@ -50,17 +47,18 @@
           <% } %>
           </ul>
 
-          <h2>Add a message</h2>
+          <!-- <h2>Add a message</h2>
         <% if (user.local.email) { %>
           <form action="/messages" method="POST">
             <input type="text" value="<%= user.local.email %>" name="name">
             <input type="text" placeholder="message" name="msg">
             <button type="submit">Submit</button>
           </form>
-        </div>
-        <% } %>
+        <% } %> -->
+        </section>
 
-</div>
+
+
 
 <script src="main.js"></script>
 
