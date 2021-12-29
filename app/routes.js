@@ -1,4 +1,6 @@
-module.exports = function(app, passport, db) {
+const user = require("./models/user");
+
+module.exports = function(app, passport, db, ObjectId) {
   //app is express dependency in server js, passport is dependecny in server js, db is database that is connected from server js
 
 // normal routes ===============================================================
@@ -35,7 +37,7 @@ module.exports = function(app, passport, db) {
 // message board routes ===============================================================
 
     app.post('/messages', (req, res) => {
-      db.collection('messages').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0}, (err, result) => {
+      db.collection('messages').save({name: req.body.name, msg: req.body.msg, thumbUp: 0, thumbDown:0, postedBy: req.user._id, username: req.body.username}, (err, result) => {
         if (err) return console.log(err)
         console.log('saved to database')
         res.redirect('/profile')
@@ -43,14 +45,15 @@ module.exports = function(app, passport, db) {
     })
 
     app.put('/messages', (req, res) => {
+      console.log(ObjectId(req.body.up))
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+      .findOneAndUpdate({_id: ObjectId(req.body.up)}, {
         $set: {
-          thumbUp:req.body.thumbUp + 1
+          thumbUp: req.body.thumbUp + 1
         }
       }, {
         sort: {_id: -1},
-        upsert: true
+        upsert: false
       }, (err, result) => {
         if (err) return res.send(err)
         res.send(result)
@@ -59,13 +62,13 @@ module.exports = function(app, passport, db) {
 
     app.put('/thumbDown', (req, res) => {
       db.collection('messages')
-      .findOneAndUpdate({name: req.body.name, msg: req.body.msg}, {
+      .findOneAndUpdate({_id: ObjectId(req.body.down)}, {
         $set: {
           thumbUp: req.body.thumbUp - 1 
         }
       }, {
         sort: {_id: -1},
-        upsert: true
+        upsert: false
       }, (err, result) => {
         if (err) return res.send(err)
         res.send(result)
@@ -73,18 +76,13 @@ module.exports = function(app, passport, db) {
     })
 
     app.delete('/messages', (req, res) => {
-      db.collection('messages').findOneAndDelete({name: req.body.name, msg: req.body.msg}, (err, result) => {
+      db.collection('messages').findOneAndDelete({_id: ObjectId(req.body.trash)}, (err, result) => {
         if (err) return res.send(500, err)
         res.send('Message deleted!')
       })
     })
 
-    app.delete('/filter', (req, res) => {
-      db.collection('messages').remove({name: req.body.name, msg: req.body.msg}, (err, result) => {
-        if (err) return res.send(500, err)
-        res.send('Message deleted!')
-      })
-    })
+    
 
 // =============================================================================
 // AUTHENTICATE (FIRST LOGIN) ==================================================

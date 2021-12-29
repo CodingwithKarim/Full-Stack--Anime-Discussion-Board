@@ -43,7 +43,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bootstrap 101 Template</title>
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
@@ -63,9 +63,13 @@
           
         <h1><span class="fa fa-sign-in"></span> Sign Up!</h1>
           <form action = '/signup' method="post">
+            <div class="form-floating">  
+              <label for="floatingInput"></label>
+              <input type="text" class="form-control"  placeholder="Username" name="name">
+            </div>
           <div class="form-floating">  
             <label for="floatingInput"></label>
-            <input type="text" class="form-control"  placeholder="Name" name="email">
+            <input type="text" class="form-control"  placeholder="Email" name="email">
           </div>
           <div class="form-floating">
             <label for=" floatingPassword"></label>

@@ -20,3 +20,15 @@ body {
 .page-header{
     border: none;
 }
+
+.username{
+  margin-bottom: 2%;
+}
+
+.topic{
+  margin-bottom: 1%;
+}
+
+.user{
+  color:aqua
+}

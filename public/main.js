@@ -4,17 +4,16 @@ var thumbDown = document.getElementsByClassName("fa-thumbs-down");
 
 
 Array.from(thumbUp).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
-        const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[5].innerText)
+      element.addEventListener('click', function(e){
+       const up = e.target.dataset.up
+       console.log(this.parentNode.parentNode.childNodes)
+       const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[1].innerText)
         fetch('messages', {
           method: 'put',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            'name': name,
-            'msg': msg,
-            'thumbUp':thumbUp
+            'up': up,
+            'thumbUp': thumbUp
           })
         })
         .then(response => {
@@ -28,18 +27,15 @@ Array.from(thumbUp).forEach(function(element) {
 });
 
 Array.from(thumbDown).forEach(function(element) {
-  element.addEventListener('click', function(){
-    console.log('Hello')
-    const name = this.parentNode.parentNode.childNodes[1].innerText
-    const msg = this.parentNode.parentNode.childNodes[3].innerText
-    const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[5].innerText)
+  element.addEventListener('click', function(e){
+    const down = e.target.dataset.down
+    const thumbUp = parseFloat(this.parentNode.parentNode.childNodes[1].innerText)
     fetch('thumbDown', {
       method: 'put',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        'name': name,
-        'msg': msg,
-        'thumbUp': thumbUp
+        'down': down,
+        'thumbUp': thumbUp,
       })
     })
     .then(response => {
@@ -57,17 +53,15 @@ Array.from(thumbDown).forEach(function(element) {
 
 
 Array.from(trash).forEach(function(element) {
-      element.addEventListener('click', function(){
-        const name = this.parentNode.parentNode.childNodes[1].innerText
-        const msg = this.parentNode.parentNode.childNodes[3].innerText
+      element.addEventListener('click', function(e){
+        const trash = e.target.dataset.delete
         fetch('messages', {
           method: 'delete',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            'name': name,
-            'msg': msg
+            'trash': trash,
           })
         }).then(function (response) {
           window.location.reload()
